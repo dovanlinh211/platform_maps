@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:platform_maps_flutter/platform_maps_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,7 +16,7 @@ class _HomeState extends State<Home> {
   var myMarkers = HashSet<Marker>();
 
 // init GoogleMap Controller
-  Completer<GoogleMapController> _controller = Completer();
+  Completer<PlatformMapController> _controller = Completer();
 
 // init Camera position
   static final CameraPosition _kGooglePlex =
@@ -28,15 +28,24 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Google Maps")),
+      appBar: AppBar(title: Text("Platform Maps")),
 
       // body show Maps
-      body: GoogleMap(
+      body: PlatformMap(
         mapType: MapType.hybrid,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        onTap: (location) => print("onTap $location"),
+        onCameraMove: (cameraUpdate) => print("onCameraMove: $cameraUpdate"),
+        compassEnabled: false,
         initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
+        onMapCreated: (PlatformMapController controller) {
           _controller.complete(controller);
-
+          Future.delayed(Duration(seconds: 10)).then((value) {
+            controller.animateCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(
+                    target: LatLng(51.5160895, -0.1294527), zoom: 18)));
+          });
           // add markers to myMarker
           setState(() {
             // ignore: prefer_const_constructors
@@ -56,7 +65,7 @@ class _HomeState extends State<Home> {
 
       // Button go to location
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 30.0),
+        padding: const EdgeInsets.only(right: 60.0),
         child: FloatingActionButton.extended(
           onPressed: _goToTheLake,
           label: Text("go to 219 Trung Kinh!"),
@@ -68,7 +77,7 @@ class _HomeState extends State<Home> {
 
 // function to set controller to location
   Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
+    final PlatformMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }
