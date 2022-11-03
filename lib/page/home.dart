@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Platform Maps")),
+      //appBar: AppBar(title: Text("Platform Maps")),
 
       // body show Maps
       body: PlatformMap(
