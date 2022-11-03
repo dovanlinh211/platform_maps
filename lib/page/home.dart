@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:collection';
 
@@ -22,14 +24,14 @@ class _HomeState extends State<Home> {
   }
 
 // init GoogleMap Controller
-  Completer<PlatformMapController> _controller = Completer();
+  final Completer<PlatformMapController> _controller = Completer();
 
 // init Camera position
-  static final CameraPosition _kGooglePlex =
+  static const CameraPosition _kGooglePlex =
       CameraPosition(target: LatLng(37, -122), zoom: 14);
 
 // init another Camera position
-  static final CameraPosition _kLake = CameraPosition(
+  static const CameraPosition _kLake = CameraPosition(
       target: LatLng(21.0203579, 105.7913902), bearing: 30, tilt: 0, zoom: 18);
   @override
   Widget build(BuildContext context) {
@@ -47,9 +49,9 @@ class _HomeState extends State<Home> {
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (PlatformMapController controller) {
           _controller.complete(controller);
-          Future.delayed(Duration(seconds: 10)).then((value) {
+          Future.delayed(const Duration(seconds: 10)).then((value) {
             controller.animateCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(
+                const CameraPosition(
                     target: LatLng(51.5160895, -0.1294527), zoom: 18)));
           });
           // add markers to myMarker
@@ -61,7 +63,7 @@ class _HomeState extends State<Home> {
                 markerId: MarkerId("1"),
 
                 //postion of the markers
-                position: LatLng(21.0203579, 105.7913902),
+                position: const LatLng(21.0203579, 105.7913902),
                 infoWindow: InfoWindow(
                   // name of marker
                   title: "Day la Central Point ",
@@ -84,8 +86,8 @@ class _HomeState extends State<Home> {
         padding: const EdgeInsets.only(right: 150.0),
         child: FloatingActionButton.extended(
           onPressed: _goToTheLake,
-          label: Text("go to!"),
-          icon: Icon(Icons.directions_boat),
+          label: const Text("go to!"),
+          icon: const Icon(Icons.directions_boat),
         ),
       ),
     );
