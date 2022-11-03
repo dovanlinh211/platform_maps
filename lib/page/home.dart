@@ -14,6 +14,12 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 // init Set of markers
   var myMarkers = HashSet<Marker>();
+// Custom marker icons
+  late BitmapDescriptor customMarker;
+  getCustomMarker() async {
+    // customMarker =
+    //      await BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, assetName);
+  }
 
 // init GoogleMap Controller
   Completer<PlatformMapController> _controller = Completer();
@@ -32,12 +38,12 @@ class _HomeState extends State<Home> {
 
       // body show Maps
       body: PlatformMap(
-        mapType: MapType.hybrid,
+        mapType: MapType.normal,
         myLocationEnabled: true,
         myLocationButtonEnabled: true,
         onTap: (location) => print("onTap $location"),
-        onCameraMove: (cameraUpdate) => print("onCameraMove: $cameraUpdate"),
-        compassEnabled: false,
+        // onCameraMove: (cameraUpdate) => print("onCameraMove: $cameraUpdate"),
+        compassEnabled: true,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (PlatformMapController controller) {
           _controller.complete(controller);
@@ -55,7 +61,17 @@ class _HomeState extends State<Home> {
                 markerId: MarkerId("1"),
 
                 //postion of the markers
-                position: LatLng(21.0203579, 105.7913902)));
+                position: LatLng(21.0203579, 105.7913902),
+                infoWindow: InfoWindow(
+                  // name of marker
+                  title: "Day la Central Point ",
+                  // Description
+                  snippet: "Please share",
+                  //
+                  onTap: () {
+                    print("Tap on $InfoWindow.title");
+                  },
+                )));
           });
         },
 
@@ -65,10 +81,10 @@ class _HomeState extends State<Home> {
 
       // Button go to location
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 60.0),
+        padding: const EdgeInsets.only(right: 150.0),
         child: FloatingActionButton.extended(
           onPressed: _goToTheLake,
-          label: Text("go to 219 Trung Kinh!"),
+          label: Text("go to!"),
           icon: Icon(Icons.directions_boat),
         ),
       ),
@@ -79,5 +95,6 @@ class _HomeState extends State<Home> {
   Future<void> _goToTheLake() async {
     final PlatformMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+    print("Go to 219 Trung Kinh");
   }
 }
